@@ -51,7 +51,7 @@ class _StartPageState extends State<StartPage> {
                           fontFamily: "OpenSans")),
                   //const SizedBox(height: 8),
                   Text(
-                    'Optionally, fill in the following information. We do not collect any personal information. This is for your reference only',
+                    'We do not collect any personal information. This is for your reference only.',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.grey[800],

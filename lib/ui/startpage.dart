@@ -136,34 +136,30 @@ class _StartPageState extends State<StartPage> {
   }
 
   void _submitForm() async {
-    if (_formKey.currentState!.validate() &&
-        _dobController.text.isNotEmpty &&
-        _nameController.text.isNotEmpty) {
-      // Save the profile details
-      //...
+    // Save the profile details
+    //...
 
-      UserProfile profile = UserProfile(
-        name: _nameController.text,
-        dob: _dobController.text,
-        pcp: _pcpController.text,
-        healthConditions: _healthConditionsController.text,
-        pharmacy: _pharmacyController.text,
-      );
+    UserProfile profile = UserProfile(
+      name: _nameController.text,
+      dob: _dobController.text,
+      pcp: _pcpController.text,
+      healthConditions: _healthConditionsController.text,
+      pharmacy: _pharmacyController.text,
+    );
 
-      // Save the profile to the database
-      Provider.of<ProfileProvider>(context, listen: false).saveProfile(profile);
+    // Save the profile to the database
+    Provider.of<ProfileProvider>(context, listen: false).saveProfile(profile);
 
-      // Update SharedPreferences to indicate the first launch is complete
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('first_launch', false);
+    // Update SharedPreferences to indicate the first launch is complete
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('first_launch', false);
 
-      if (!mounted) return;
+    if (!mounted) return;
 
-      // Navigate to the HomeScreen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-    }
+    // Navigate to the HomeScreen
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => HomeScreen()),
+    );
   }
 }

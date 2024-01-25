@@ -59,7 +59,7 @@ class _StartPageState extends State<StartPage> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _nameController,
                     decoration: _inputDecoration('Name (optional)'),

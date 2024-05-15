@@ -1,4 +1,5 @@
 import 'package:medication_tracker/database/model/medication_model.dart';
+import 'package:medication_tracker/database/model/user_profile_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -68,6 +69,49 @@ class DatabaseHelper {
   // Helper methods //
 
   // Profile Table Methods
+  // Insert a Profile object into the database with error handling
+  Future<int> insertProfile(UserProfile profile) async {
+    Database db = await instance.database;
+    try {
+      return await db.insert(profileTable, profile.toMap());
+    } catch (e) {
+      throw DatabaseException('Failed to insert profile: $e');
+    }
+  }
+
+  // Get a Profile object from the database with error handling
+  Future<UserProfile> getProfile(int id) async {
+    Database db = await instance.database;
+    try {
+      List<Map> maps =
+          await db.query(profileTable, where: 'id = ?', whereArgs: [id]);
+
+      return UserProfile.fromMap(maps.first as Map<String, dynamic>);
+    } catch (e) {
+      throw DatabaseException('Failed to load profile: $e');
+    }
+  }
+
+  // Update a Profile object in the database with error handling
+  Future<int> updateProfile(UserProfile profile) async {
+    Database db = await instance.database;
+    try {
+      return await db.update(profileTable, profile.toMap(),
+          where: 'id = ?', whereArgs: [profile.id]);
+    } catch (e) {
+      throw DatabaseException('Failed to update profile: $e');
+    }
+  }
+
+  // Delete a Profile object from the database with error handling
+  Future<int> deleteProfile(int id) async {
+    Database db = await instance.database;
+    try {
+      return await db.delete(profileTable, where: 'id = ?', whereArgs: [id]);
+    } catch (e) {
+      throw DatabaseException('Failed to delete profile: $e');
+    }
+  }
 
   //Medication Table Methods
   // Insert a Medication object into the database with error handling

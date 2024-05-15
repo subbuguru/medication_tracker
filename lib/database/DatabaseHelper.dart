@@ -14,13 +14,9 @@ class DatabaseException implements Exception {
 
 class DatabaseHelper {
   static const _databaseName = "MedicationDatabase.db";
-  static const _databaseVersion = 2;
-  static const table = 'medication_table';
-
-  static const columnId = 'id';
-  static const columnName = 'name';
-  static const columnDosage = 'dosage';
-  static const columnAdditionalInfo = 'additionalInfo';
+  static const _databaseVersion = 3;
+  static const medicationTable = 'medication_table';
+  static const profileTable = 'profile_table';
 
   // Make this a singleton class
   DatabaseHelper._privateConstructor();
@@ -41,14 +37,24 @@ class DatabaseHelper {
 
   Future _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE medication_table (
+      CREATE TABLE $profileTable (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        dob TEXT NOT NULL,
+        pcp TEXT,
+        healthConditions TEXT,
+        pharmacy TEXT
+      );
+      CREATE TABLE $medicationTable (
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         name TEXT NOT NULL,
         dosage TEXT NOT NULL,
         additionalInfo TEXT NOT NULL,
         imageUrl TEXT 
-      )
-    '''); // New column for image URL
+        profileId INTEGER,
+        FOREIGN KEY (profileId) REFERENCES $profileTable (id)
+      );
+    ''');
   }
 
   // Handle database upgrades
@@ -56,54 +62,52 @@ class DatabaseHelper {
     if (oldVersion < 2) {
       // Add imageUrl column and change id type in existing tables
       await db.execute('ALTER TABLE medication_table ADD COLUMN imageUrl TEXT');
-      // Additional upgrade logic if needed
     }
-    // Handle future upgrades by adding more conditions
-  }
 
-  // Helper methods
+    // Helper methods //
 
-  // Insert a Medication object into the database with error handling
-  Future<int> insert(Medication medication) async {
-    Database db = await instance.database;
-    try {
-      return await db.insert(table, medication.toMap());
-    } catch (e) {
-      throw DatabaseException('Failed to insert medication: $e');
+    // Insert a Medication object into the database with error handling
+    Future<int> insert(Medication medication) async {
+      Database db = await instance.database;
+      try {
+        return await db.insert(table, medication.toMap());
+      } catch (e) {
+        throw DatabaseException('Failed to insert medication: $e');
+      }
     }
-  }
 
-  // Update a Medication object in the database with error handling
-  Future<int> update(Medication medication) async {
-    Database db = await instance.database;
-    try {
-      return await db.update(table, medication.toMap(),
-          where: '$columnId = ?', whereArgs: [medication.id]);
-    } catch (e) {
-      throw DatabaseException('Failed to update medication: $e');
+    // Update a Medication object in the database with error handling
+    Future<int> update(Medication medication) async {
+      Database db = await instance.database;
+      try {
+        return await db.update(table, medication.toMap(),
+            where: 'id = ?', whereArgs: [medication.id]);
+      } catch (e) {
+        throw DatabaseException('Failed to update medication: $e');
+      }
     }
-  }
 
-  // Delete a Medication object from the database with error handling
-  Future<int> delete(int id) async {
-    Database db = await instance.database;
-    try {
-      return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
-    } catch (e) {
-      throw DatabaseException('Failed to delete medication: $e');
+    // Delete a Medication object from the database with error handling
+    Future<int> delete(int id) async {
+      Database db = await instance.database;
+      try {
+        return await db.delete(table, where: 'id = ?', whereArgs: [id]);
+      } catch (e) {
+        throw DatabaseException('Failed to delete medication: $e');
+      }
     }
-  }
 
-  // Retrieve all Medications from the database with error handling
-  Future<List<Medication>> queryAllRows() async {
-    Database db = await instance.database;
-    try {
-      var res = await db.query(table);
-      return res.isNotEmpty
-          ? res.map((c) => Medication.fromMap(c)).toList()
-          : [];
-    } catch (e) {
-      throw DatabaseException('Failed to retrieve medications: $e');
+    // Retrieve all Medications from the database with error handling
+    Future<List<Medication>> queryAllRows() async {
+      Database db = await instance.database;
+      try {
+        var res = await db.query(table);
+        return res.isNotEmpty
+            ? res.map((c) => Medication.fromMap(c)).toList()
+            : [];
+      } catch (e) {
+        throw DatabaseException('Failed to retrieve medications: $e');
+      }
     }
   }
 }

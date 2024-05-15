@@ -51,10 +51,10 @@ class DatabaseHelper {
         dosage TEXT NOT NULL,
         additionalInfo TEXT NOT NULL,
         imageUrl TEXT 
-        profileId INTEGER,
+        profileId INTEGER NOT NULL, 
         FOREIGN KEY (profileId) REFERENCES $profileTable (id)
-      );
-    ''');
+      ); 
+    '''); //ensure that profileId is provided for all medications to assign them a profile
   }
 
   // Handle database upgrades
@@ -63,51 +63,53 @@ class DatabaseHelper {
       // Add imageUrl column and change id type in existing tables
       await db.execute('ALTER TABLE medication_table ADD COLUMN imageUrl TEXT');
     }
+  }
 
-    // Helper methods //
+  // Helper methods //
 
-    // Insert a Medication object into the database with error handling
-    Future<int> insert(Medication medication) async {
-      Database db = await instance.database;
-      try {
-        return await db.insert(table, medication.toMap());
-      } catch (e) {
-        throw DatabaseException('Failed to insert medication: $e');
-      }
+  // Profile Table Methods
+
+  //Medication Table Methods
+  // Insert a Medication object into the database with error handling
+  Future<int> insertMedication(Medication medication) async {
+    Database db = await instance.database;
+    try {
+      return await db.insert(medicationTable, medication.toMap());
+    } catch (e) {
+      throw DatabaseException('Failed to insert medication: $e');
     }
+  }
 
-    // Update a Medication object in the database with error handling
-    Future<int> update(Medication medication) async {
-      Database db = await instance.database;
-      try {
-        return await db.update(table, medication.toMap(),
-            where: 'id = ?', whereArgs: [medication.id]);
-      } catch (e) {
-        throw DatabaseException('Failed to update medication: $e');
-      }
+  // Update a Medication object in the database with error handling
+  Future<int> updateMedication(Medication medication) async {
+    Database db = await instance.database;
+    try {
+      return await db.update(medicationTable, medication.toMap(),
+          where: 'id = ?', whereArgs: [medication.id]);
+    } catch (e) {
+      throw DatabaseException('Failed to update medication: $e');
     }
+  }
 
-    // Delete a Medication object from the database with error handling
-    Future<int> delete(int id) async {
-      Database db = await instance.database;
-      try {
-        return await db.delete(table, where: 'id = ?', whereArgs: [id]);
-      } catch (e) {
-        throw DatabaseException('Failed to delete medication: $e');
-      }
+  // Delete a Medication object from the database with error handling
+  Future<int> deleteMedication(int id) async {
+    Database db = await instance.database;
+    try {
+      return await db.delete(medicationTable, where: 'id = ?', whereArgs: [id]);
+    } catch (e) {
+      throw DatabaseException('Failed to delete medication: $e');
     }
+  }
 
-    // Retrieve all Medications from the database with error handling
-    Future<List<Medication>> queryAllRows() async {
-      Database db = await instance.database;
-      try {
-        var res = await db.query(table);
-        return res.isNotEmpty
-            ? res.map((c) => Medication.fromMap(c)).toList()
-            : [];
-      } catch (e) {
-        throw DatabaseException('Failed to retrieve medications: $e');
-      }
+  // Retrieve all Medications from a certain profileID from the database with error handling
+  Future<List<Medication>> queryByProfile(int profileId) async {
+    Database db = await instance.database;
+    try {
+      var res = await db.query(medicationTable,
+          where: 'profile_id = ?', whereArgs: [profileId]);
+      return res.map((c) => Medication.fromMap(c)).toList();
+    } catch (e) {
+      throw DatabaseException('Failed to retrieve medications: $e');
     }
   }
 }

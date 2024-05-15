@@ -49,17 +49,17 @@ class MedicationProvider with ChangeNotifier {
   }
 
   Future<void> addMedication(Medication medication) async {
-    await _databaseHelper.insert(medication);
+    await _databaseHelper.insertMedication(medication);
     await loadMedications();
   }
 
   Future<void> updateMedication(Medication medication) async {
-    await _databaseHelper.update(medication);
+    await _databaseHelper.updateMedication(medication);
     await loadMedications();
   }
 
   Future<void> deleteMedication(int id) async {
-    await _databaseHelper.delete(id);
+    await _databaseHelper.deleteMedication(id);
     await loadMedications();
   }
 }

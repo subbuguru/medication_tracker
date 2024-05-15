@@ -32,7 +32,7 @@ class MedicationProvider with ChangeNotifier {
         if (medication.imageUrl.isNotEmpty) {
           imagePathAdjustments.add(
             CameraHelper.getImagePath(medication.imageUrl).then((path) {
-              medication.imageUrl = path ?? medication.imageUrl;
+              medication.imageUrl = path;
             }),
           );
         }

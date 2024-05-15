@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:medication_tracker/camera_services/image_ui_handler.dart';
+import 'package:medication_tracker/services/camera/ImageService.dart';
 
-import 'package:medication_tracker/providers/fda_api_provider.dart';
+import 'package:medication_tracker/database/providers/fda_api_provider.dart';
 
-import 'package:medication_tracker/ui/create_medication_view.dart';
-import 'package:medication_tracker/widgets/black_button.dart';
-import 'package:medication_tracker/widgets/photo_upload_row.dart';
+import 'package:medication_tracker/ui/views/create_medication_view.dart';
+import 'package:medication_tracker/ui/views/widgets/black_button.dart';
+import 'package:medication_tracker/ui/views/widgets/photo_upload_row.dart';
 import 'package:provider/provider.dart';
-import 'package:medication_tracker/widgets/search_tile.dart';
+import 'package:medication_tracker/ui/views/widgets/search_tile.dart';
 //permission handler
 
 //import async

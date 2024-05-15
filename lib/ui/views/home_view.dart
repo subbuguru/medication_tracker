@@ -1,15 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:medication_tracker/export/pdf_save_service.dart';
-import 'package:medication_tracker/export/pdf_share_service.dart';
-import 'package:medication_tracker/providers/medication_provider.dart';
-import 'package:medication_tracker/providers/profile_provider.dart';
-import 'package:medication_tracker/ui/edit_medication_view.dart';
-import 'package:medication_tracker/ui/edit_profile_view.dart';
-import 'package:medication_tracker/ui/fda_search_view.dart';
-import 'package:medication_tracker/widgets/home_speed_dial.dart';
-import 'package:medication_tracker/widgets/med_tile.dart';
-import 'package:medication_tracker/widgets/nav_bar.dart';
+
+import 'package:medication_tracker/database/providers/medication_provider.dart';
+import 'package:medication_tracker/database/providers/profile_provider.dart';
+import 'package:medication_tracker/ui/views/edit_medication_view.dart';
+import 'package:medication_tracker/ui/views/fda_search_view.dart';
+
+import 'package:medication_tracker/ui/views/widgets/med_tile.dart';
+import 'package:medication_tracker/ui/views/widgets/nav_bar.dart';
 // Import your medication provider
 
 //import provider
@@ -55,7 +53,7 @@ class HomeScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16.0, top: 8.0),
                     child: AutoSizeText(
-                      "${DOBOrNA(profileProvider.userProfile?.name)}",
+                      DOBOrNA(profileProvider.userProfile?.name),
                       style: const TextStyle(
                         fontFamily: 'OpenSans',
                         fontSize: 30,

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:medication_tracker/ui/full_screen_image_view.dart'; // Make sure this path is correct
+import 'package:medication_tracker/ui/views/full_screen_image_view.dart';
 
 class ZoomableImage extends StatelessWidget {
   final String imagePath;

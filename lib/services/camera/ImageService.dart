@@ -4,9 +4,9 @@
 // image_service.dart
 import 'package:flutter/material.dart';
 
-import 'package:medication_tracker/camera_services/image_permission_handler.dart';
-import 'package:medication_tracker/model/medication_model.dart';
-import 'package:medication_tracker/providers/medication_provider.dart';
+import 'package:medication_tracker/services/camera/ImagePermissionService.dart';
+import 'package:medication_tracker/database/model/medication_model.dart';
+import 'package:medication_tracker/database/providers/medication_provider.dart';
 import 'package:medication_tracker/utils/dialog_util.dart';
 import 'package:provider/provider.dart';
 

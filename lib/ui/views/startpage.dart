@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:medication_tracker/model/user_profile_model.dart';
-import 'package:medication_tracker/providers/profile_provider.dart';
-import 'package:medication_tracker/ui/home_view.dart';
-import 'package:medication_tracker/widgets/black_button.dart';
-import 'package:medication_tracker/widgets/privacy_policy_button.dart';
+import 'package:medication_tracker/database/model/user_profile_model.dart';
+import 'package:medication_tracker/database/providers/profile_provider.dart';
+import 'package:medication_tracker/ui/views/home_view.dart';
+import 'package:medication_tracker/ui/views/widgets/black_button.dart';
+import 'package:medication_tracker/ui/views/widgets/privacy_policy_button.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';

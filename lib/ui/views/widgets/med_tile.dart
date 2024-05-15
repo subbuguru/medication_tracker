@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:medication_tracker/model/medication_model.dart';
-import 'package:medication_tracker/providers/medication_provider.dart';
-import 'package:medication_tracker/ui/edit_medication_view.dart';
+import 'package:medication_tracker/database/model/medication_model.dart';
+import 'package:medication_tracker/database/providers/medication_provider.dart';
+import 'package:medication_tracker/ui/views/edit_medication_view.dart';
 import 'package:provider/provider.dart';
 
 class MedicationTile extends StatelessWidget {

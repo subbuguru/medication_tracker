@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:medication_tracker/export/pdf_save_service.dart';
-import 'package:medication_tracker/export/pdf_share_service.dart';
-import 'package:medication_tracker/providers/medication_provider.dart';
-import 'package:medication_tracker/ui/fda_search_view.dart';
+import 'package:medication_tracker/services/export/pdf_save_service.dart';
+import 'package:medication_tracker/services/export/pdf_share_service.dart';
+import 'package:medication_tracker/database/providers/medication_provider.dart';
+import 'package:medication_tracker/ui/views/fda_search_view.dart';
+
 import 'package:provider/provider.dart';
 
 class HomeSpeedDial extends StatelessWidget {

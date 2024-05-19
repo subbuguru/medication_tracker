@@ -146,7 +146,7 @@ class DatabaseHelper {
   }
 
   // Retrieve all Medications from a certain profileID from the database with error handling
-  Future<List<Medication>> queryByProfile(int profileId) async {
+  Future<List<Medication>> getMedications(int profileId) async {
     Database db = await instance.database;
     try {
       var res = await db.query(medicationTable,

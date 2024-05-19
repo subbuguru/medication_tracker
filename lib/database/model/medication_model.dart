@@ -4,6 +4,7 @@ class Medication {
   String dosage;
   String additionalInfo;
   String imageUrl; // Required field, can be empty
+  int profileId;
 
   Medication({
     this.id,
@@ -11,6 +12,7 @@ class Medication {
     required this.dosage,
     required this.additionalInfo,
     required this.imageUrl, // Marked as required
+    required this.profileId,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,6 +24,7 @@ class Medication {
       'imageUrl': imageUrl, // Always present, if no image is empty string
       //note that imageUrl is a bad name, should be imageFileName because images are local and stored in documents folder
       //and path is added to it to get the full path
+      'profileId': profileId,
     };
   }
 
@@ -32,6 +35,7 @@ class Medication {
       dosage: json['dosage'],
       additionalInfo: json['additionalInfo'],
       imageUrl: json['imageUrl'],
+      profileId: json['profileId'],
     );
   }
 
@@ -42,6 +46,7 @@ class Medication {
     String? dosage,
     String? additionalInfo,
     String? imageUrl,
+    int? profileId,
   }) {
     return Medication(
       id: id ?? this.id,
@@ -49,6 +54,7 @@ class Medication {
       dosage: dosage ?? this.dosage,
       additionalInfo: additionalInfo ?? this.additionalInfo,
       imageUrl: imageUrl ?? this.imageUrl,
+      profileId: profileId ?? this.profileId,
     );
   }
 }

@@ -21,10 +21,12 @@ class MedicationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadMedications() async {
+  //load medications based on given profileId
+  Future<void> loadMedications(int profileId) async {
     setLoading(true);
     try {
-      List<Medication> loadedMedications = await _databaseHelper.queryAllRows();
+      List<Medication> loadedMedications =
+          await _databaseHelper.getMedications(profileId);
 
       // Adjust image paths for each medication
       List<Future> imagePathAdjustments = [];

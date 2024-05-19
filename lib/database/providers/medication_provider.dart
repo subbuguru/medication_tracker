@@ -13,7 +13,7 @@ class MedicationProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
 
   MedicationProvider() {
-    loadMedications();
+    loadMedications(); // TODO: make a method which can get the profileId from profileProvider
   }
 
   void setLoading(bool loading) {
@@ -52,16 +52,20 @@ class MedicationProvider with ChangeNotifier {
 
   Future<void> addMedication(Medication medication) async {
     await _databaseHelper.insertMedication(medication);
-    await loadMedications();
+    await loadMedications(medication.profileId);
   }
 
   Future<void> updateMedication(Medication medication) async {
     await _databaseHelper.updateMedication(medication);
-    await loadMedications();
+    await loadMedications(medication.profileId);
   }
 
-  Future<void> deleteMedication(int id) async {
-    await _databaseHelper.deleteMedication(id);
-    await loadMedications();
+  Future<void> deleteMedication(Medication medication) async {
+    if (medication.id == null) {
+      throw Exception('Medication does not exist in the database');
+    }
+    await _databaseHelper
+        .deleteMedication(medication.id!); // if we are deleting it should exist
+    await loadMedications(medication.profileId);
   }
 }

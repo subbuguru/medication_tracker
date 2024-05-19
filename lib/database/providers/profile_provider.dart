@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:medication_tracker/database/profile_database.dart';
+import 'package:medication_tracker/database/DatabaseHelper.dart';
 import 'package:medication_tracker/database/model/user_profile_model.dart';
 
 class ProfileProvider with ChangeNotifier {
-  final ProfileDatabaseHelper _dbHelper = ProfileDatabaseHelper.instance;
+  final DatabaseHelper _dbHelper = DatabaseHelper.instance;
 
-  UserProfile? _userProfile;
-  UserProfile? get userProfile => _userProfile;
+  UserProfile? _currentProfile;
+  UserProfile? get currentProfile => _currentProfile;
 
   ProfileProvider() {
     loadProfile();
   }
 
   Future<void> loadProfile() async {
-    List<UserProfile> profiles = await _dbHelper.queryAllRows();
-    if (profiles.isNotEmpty) {
-      _userProfile = profiles.first;
-    }
+    //ADD
     notifyListeners();
   }
 
   Future<void> saveProfile(UserProfile profile) async {
-    await _dbHelper.deleteAllProfiles();
-    await _dbHelper.insert(profile);
+    //ADD
     await loadProfile();
   }
 
   Future<void> deleteProfile(int id) async {
-    await _dbHelper.delete(id);
-    _userProfile = null;
+    //ADD
+    notifyListeners();
+  }
+
+  void updateProfile(UserProfile profile) {
+    //ADD
     notifyListeners();
   }
 }

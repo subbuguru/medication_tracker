@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medication_tracker/database/model/medication_model.dart';
 import 'package:medication_tracker/database/model/ocr_title_model.dart';
 import 'package:medication_tracker/database/providers/medication_provider.dart';
-import 'package:medication_tracker/ui/views/widgets/zoomable_image.dart';
+import 'package:medication_tracker/ui/widgets/zoomable_image.dart';
 import 'package:provider/provider.dart';
 
 class ConfirmOcrView extends StatefulWidget {

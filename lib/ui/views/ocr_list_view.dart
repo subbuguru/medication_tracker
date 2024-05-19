@@ -3,7 +3,7 @@ import 'package:medication_tracker/database/model/ocr_title_model.dart'; // Assu
 import 'package:medication_tracker/database/model/medication_model.dart';
 
 import 'package:medication_tracker/ui/views/confirm_ocr_view.dart';
-import 'package:medication_tracker/ui/views/widgets/ocr_name_tile.dart'; // Or any other page you navigate to
+import 'package:medication_tracker/ui/widgets/ocr_name_tile.dart'; // Or any other page you navigate to
 
 class AddNamePage extends StatefulWidget {
   final List<OCRTitle> ocrTitles;

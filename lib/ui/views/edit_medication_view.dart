@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:medication_tracker/services/camera/ImageService.dart';
 import 'package:medication_tracker/database/model/medication_model.dart';
 import 'package:medication_tracker/database/providers/medication_provider.dart';
-import 'package:medication_tracker/ui/views/widgets/black_button.dart';
-import 'package:medication_tracker/ui/views/widgets/photo_upload_row.dart';
-import 'package:medication_tracker/ui/views/widgets/zoomable_image.dart';
+import 'package:medication_tracker/ui/widgets/black_button.dart';
+import 'package:medication_tracker/ui/widgets/photo_upload_row.dart';
+import 'package:medication_tracker/ui/widgets/zoomable_image.dart';
 import 'package:provider/provider.dart';
 
 class EditMedicationPage extends StatefulWidget {

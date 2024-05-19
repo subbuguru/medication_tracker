@@ -6,8 +6,8 @@ import 'package:medication_tracker/database/providers/profile_provider.dart';
 import 'package:medication_tracker/ui/views/edit_medication_view.dart';
 import 'package:medication_tracker/ui/views/fda_search_view.dart';
 
-import 'package:medication_tracker/ui/views/widgets/med_tile.dart';
-import 'package:medication_tracker/ui/views/widgets/nav_bar.dart';
+import 'package:medication_tracker/ui/widgets/med_tile.dart';
+import 'package:medication_tracker/ui/widgets/nav_bar.dart';
 // Import your medication provider
 
 //import provider

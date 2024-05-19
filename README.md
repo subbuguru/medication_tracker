@@ -1,16 +1,16 @@
 # medication_tracker
 
-A new Flutter project.
 
-## Getting Started
+CURRENTLY: MIGRATING TO A MULTIPLE PROFILE SYSTEM! & WORKING ON A SCANNING SYSTEM
 
-This project is a starting point for a Flutter application.
+## Multiple Profiles - High level overview
 
-A few resources to get you started if this is your first Flutter project:
+We need to first create a persistent storage system of the current profile id. Currently I am thinking of shared_preferences.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Then we need to modify profileProvider to take advantage of this and provide the current profile to the UI
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Third, we need to use the profile provided from the provider to modify medicationProvider to be able to provide a correct
+medication list for that given profile
+
+We also need to create a UI system to switch between profiles
+

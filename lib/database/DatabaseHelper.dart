@@ -113,6 +113,17 @@ class DatabaseHelper {
     }
   }
 
+  //get a list of all profiles
+  Future<List<UserProfile>> getAllProfiles() async {
+    Database db = await instance.database;
+    try {
+      var res = await db.query(profileTable);
+      return res.map((c) => UserProfile.fromMap(c)).toList();
+    } catch (e) {
+      throw DatabaseException('Failed to retrieve profiles: $e');
+    }
+  }
+
   //Medication Table Methods
   // Insert a Medication object into the database with error handling
   Future<int> insertMedication(Medication medication) async {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medication_tracker/services/camera/CameraService.dart';
 import 'package:medication_tracker/database/DatabaseHelper.dart';
 import 'package:medication_tracker/database/model/medication_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MedicationProvider with ChangeNotifier {
   final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
@@ -13,7 +14,7 @@ class MedicationProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
 
   MedicationProvider() {
-    loadMedications(); // TODO: make a method which can get the profileId from profileProvider
+    //get current profileId from shared preferences
   }
 
   void setLoading(bool loading) {
@@ -22,8 +23,16 @@ class MedicationProvider with ChangeNotifier {
   }
 
   //load medications based on given profileId
-  Future<void> loadMedications(int profileId) async {
+  Future<void> loadMedications() async {
     setLoading(true);
+    SharedPreferences prefs = await SharedPreferences
+        .getInstance(); //load medications based on profileId from shared preferences
+    int? profileId = prefs.getInt('profileId');
+    if (profileId == null) {
+      profileId = 1;
+      prefs.setInt('profileId', 1);
+      throw Exception('Profile ID not found in shared preferences');
+    }
     try {
       List<Medication> loadedMedications =
           await _databaseHelper.getMedications(profileId);
@@ -52,12 +61,12 @@ class MedicationProvider with ChangeNotifier {
 
   Future<void> addMedication(Medication medication) async {
     await _databaseHelper.insertMedication(medication);
-    await loadMedications(medication.profileId);
+    await loadMedications();
   }
 
   Future<void> updateMedication(Medication medication) async {
     await _databaseHelper.updateMedication(medication);
-    await loadMedications(medication.profileId);
+    await loadMedications();
   }
 
   Future<void> deleteMedication(Medication medication) async {
@@ -66,6 +75,6 @@ class MedicationProvider with ChangeNotifier {
     }
     await _databaseHelper
         .deleteMedication(medication.id!); // if we are deleting it should exist
-    await loadMedications(medication.profileId);
+    await loadMedications();
   }
 }

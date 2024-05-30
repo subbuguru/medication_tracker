@@ -1,7 +1,7 @@
-# medication_tracker
+# My Meds - Personal Meds List
+An open-source app to help people record their medication list without having their data uploaded and sold. All data is stored locally and source is available to be forked and examined.
 
-
-CURRENTLY: MIGRATING TO A MULTIPLE PROFILE SYSTEM! & WORKING ON A SCANNING SYSTEM
+CURRENTLY: **MIGRATING TO A MULTIPLE PROFILE SYSTEM** & WORKING ON A SCANNING SYSTEM
 
 ## Multiple Profiles - High level overview
 

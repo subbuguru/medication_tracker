@@ -1,7 +1,6 @@
 // database_service.dart
 import 'package:medication_tracker/data/model/medication_model.dart';
 import 'package:medication_tracker/data/model/user_profile_model.dart';
-import 'package:result_dart/result_dart.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -60,6 +59,7 @@ class DatabaseService {
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
     await db.transaction((txn) async {
       if (oldVersion < 3) {
+        // 1. Create profiles table
         await txn.execute('''
           CREATE TABLE $profileTable (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -71,9 +71,11 @@ class DatabaseService {
           )
         ''');
 
+        // 2. Add profile_id to existing medications table
         await txn.execute(
             'ALTER TABLE $medicationTable ADD COLUMN profile_id INTEGER REFERENCES $profileTable(id)');
 
+        // 3. Import existing profile or create default
         String oldProfilePath =
             join(await getDatabasesPath(), "UserProfileDatabase.db");
         int defaultProfileId;
@@ -105,129 +107,87 @@ class DatabaseService {
           });
         }
 
+        // 4. Link existing medications to the profile
         await txn.execute(
             'UPDATE $medicationTable SET profile_id = ?', [defaultProfileId]);
       }
     });
   }
 
-// Profile Methods
-  Future<Result<List<UserProfile>>> getAllProfiles() async {
-    try {
-      Database db = await database;
-      final List<Map<String, dynamic>> maps = await db.query(profileTable);
-      return Success(
-          List.generate(maps.length, (i) => UserProfile.fromMap(maps[i])));
-    } catch (e) {
-      return Failure(Exception('Failed to get all profiles: $e'));
-    }
+  // Profile Methods
+  Future<List<UserProfile>> getAllProfiles() async {
+    Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(profileTable);
+    return List.generate(maps.length, (i) => UserProfile.fromMap(maps[i]));
   }
 
-  Future<Result<UserProfile>> getProfile(int id) async {
-    try {
-      Database db = await database;
-      final List<Map<String, dynamic>> maps = await db.query(
-        profileTable,
-        where: 'id = ?',
-        whereArgs: [id],
-      );
-      return Success(UserProfile.fromMap(maps.first));
-    } catch (e) {
-      return Failure(Exception('Failed to get profile: $e'));
-    }
+  Future<UserProfile?> getProfile(int id) async {
+    Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      profileTable,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (maps.isEmpty) return null;
+    return UserProfile.fromMap(maps.first);
   }
 
-  Future<Result<int>> insertProfile(UserProfile profile) async {
-    try {
-      Database db = await database;
-      final result = await db.insert(profileTable, profile.toMap());
-      return Success(result);
-    } catch (e) {
-      return Failure(Exception('Failed to insert profile: $e'));
-    }
+  Future<int> insertProfile(UserProfile profile) async {
+    Database db = await database;
+    return await db.insert(profileTable, profile.toMap());
   }
 
-  Future<Result<int>> updateProfile(UserProfile profile) async {
-    try {
-      Database db = await database;
-      final result = await db.update(
-        profileTable,
-        profile.toMap(),
-        where: 'id = ?',
-        whereArgs: [profile.id],
-      );
-      return Success(result);
-    } catch (e) {
-      return Failure(Exception('Failed to update profile: $e'));
-    }
+  Future<int> updateProfile(UserProfile profile) async {
+    Database db = await database;
+    return await db.update(
+      profileTable,
+      profile.toMap(),
+      where: 'id = ?',
+      whereArgs: [profile.id],
+    );
   }
 
-  Future<Result<int>> deleteProfile(int id) async {
-    try {
-      Database db = await database;
-      final result = await db.delete(
-        profileTable,
-        where: 'id = ?',
-        whereArgs: [id],
-      );
-      return Success(result);
-    } catch (e) {
-      return Failure(Exception('Failed to delete profile: $e'));
-    }
+  Future<int> deleteProfile(int id) async {
+    Database db = await database;
+    return await db.delete(
+      profileTable,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
-// Medication Methods
-  Future<Result<List<Medication>>> getMedications(int profileId) async {
-    try {
-      Database db = await database;
-      final List<Map<String, dynamic>> maps = await db.query(
-        medicationTable,
-        where: 'profile_id = ?',
-        whereArgs: [profileId],
-      );
-      return Success(
-          List.generate(maps.length, (i) => Medication.fromMap(maps[i])));
-    } catch (e) {
-      return Failure(Exception('Failed to get medications: $e'));
-    }
+  // Medication Methods
+  Future<List<Medication>> getMedicationsForProfile(int profileId) async {
+    Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      medicationTable,
+      where: 'profile_id = ?',
+      whereArgs: [profileId],
+    );
+    return List.generate(maps.length, (i) => Medication.fromMap(maps[i]));
   }
 
-  Future<Result<int>> insertMedication(Medication medication) async {
-    try {
-      Database db = await database;
-      final result = await db.insert(medicationTable, medication.toMap());
-      return Success(result);
-    } catch (e) {
-      return Failure(Exception('Failed to insert medication: $e'));
-    }
+  Future<int> insertMedication(Medication medication) async {
+    Database db = await database;
+    return await db.insert(medicationTable, medication.toMap());
   }
 
-  Future<Result<int>> updateMedication(Medication medication) async {
-    try {
-      Database db = await database;
-      final result = await db.update(
-        medicationTable,
-        medication.toMap(),
-        where: 'id = ?',
-        whereArgs: [medication.id],
-      );
-      return Success(result);
-    } catch (e) {
-      return Failure(Exception('Failed to update medication: $e'));
-    }
+  Future<int> updateMedication(Medication medication) async {
+    Database db = await database;
+    return await db.update(
+      medicationTable,
+      medication.toMap(),
+      where: 'id = ?',
+      whereArgs: [medication.id],
+    );
   }
 
-  Future<Result<int>> deleteMedication(int id) async {
-    try {
-      Database db = await database;
-      final result = await db.delete(
-        medicationTable,
-        where: 'id = ?',
-        whereArgs: [id],
-      );
-      return Success(result);
-    } catch (e) {
-      return Failure(Exception('Failed to delete medication: $e'));
-    }
+  Future<int> deleteMedication(int id) async {
+    Database db = await database;
+    return await db.delete(
+      medicationTable,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }

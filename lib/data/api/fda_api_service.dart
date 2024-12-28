@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:medication_tracker/data/model/fda_drug_model.dart';
+import 'package:result_dart/result_dart.dart';
 
 class FDAAPIService {
   static final FDAAPIService _instance = FDAAPIService._internal();
@@ -9,7 +10,7 @@ class FDAAPIService {
 
   final String baseUrl = "https://api.fda.gov/drug/ndc.json";
 
-  Future<List<FDADrug>> searchMedications(String query) async {
+  Future<Result<List<FDADrug>>> searchMedications(String query) async {
     query = query.toLowerCase();
     final url = Uri.parse(
         '$baseUrl?search=brand_name:$query+generic_name:$query&limit=10');
@@ -19,14 +20,14 @@ class FDAAPIService {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         if (data['results']?.isNotEmpty ?? false) {
-          return _processMedications(data['results']
+          return Success(_processMedications(data['results']
               .map<FDADrug>((item) => FDADrug.fromMap(item))
-              .toList());
+              .toList()));
         }
       }
-      throw Exception('No results found');
+      return Failure(Exception('No results found'));
     } catch (e) {
-      throw Exception('Search failed: ${e.toString()}');
+      return Failure(Exception('Search failed: ${e.toString()}'));
     }
   }
 

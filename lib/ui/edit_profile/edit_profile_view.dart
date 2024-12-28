@@ -59,40 +59,42 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _saveProfile() {
-    if (_formKey.currentState!.validate()) {
-      final currentProfile =
-          Provider.of<ProfileProvider>(context, listen: false).selectedProfile;
-      if (currentProfile?.id == null) {
+    try {
+      if (_formKey.currentState!.validate()) {
+        final currentProfile =
+            Provider.of<ProfileProvider>(context, listen: false)
+                .selectedProfile;
+        if (currentProfile?.id == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Error: No profile selected to update'),
+            ),
+          );
+          return;
+        }
+        final profile = UserProfile(
+          id: currentProfile!.id,
+          name: _nameController.text,
+          dob: _dobController.text,
+          pcp: _pcpController.text,
+          healthConditions: _healthConditionsController.text,
+          pharmacy: _pharmacyController.text,
+        );
+        Provider.of<ProfileProvider>(context, listen: false)
+            .updateProfile(profile);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Error: No profile selected to update'),
+            content: Text('Profile successfully updated'),
           ),
         );
-        return;
       }
-      final profile = UserProfile(
-        id: currentProfile!.id,
-        name: _nameController.text,
-        dob: _dobController.text,
-        pcp: _pcpController.text,
-        healthConditions: _healthConditionsController.text,
-        pharmacy: _pharmacyController.text,
-      );
-      Provider.of<ProfileProvider>(context, listen: false)
-          .updateProfile(profile);
-      // Navigate back or show a success message
-      // show snack bar: profile updated
-      print('Saved profile: ${profile.name}, selectedProfileId: ${profile.id}');
-      // Show a Snackbar indicating profile successfully updated
+    } catch (e) {
+      // Handle the error, e.g., show a dialog or a snackbar
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Profile successfully updated'),
-        ),
+        SnackBar(content: Text('An error occurred: $e')),
       );
     }
   }
-
-// edit_profile_view.dart
 
   @override
   Widget build(BuildContext context) {

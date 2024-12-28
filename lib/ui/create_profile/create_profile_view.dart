@@ -132,24 +132,32 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   }
 
   void _submitForm() async {
-    if (_formKey.currentState!.validate() &&
-        _dobController.text.isNotEmpty &&
-        _nameController.text.isNotEmpty) {
-      UserProfile profile = UserProfile(
-        name: _nameController.text,
-        dob: _dobController.text,
-        pcp: _pcpController.text,
-        healthConditions: _healthConditionsController.text,
-        pharmacy: _pharmacyController.text,
-      );
+    try {
+      if (_formKey.currentState!.validate() &&
+          _dobController.text.isNotEmpty &&
+          _nameController.text.isNotEmpty) {
+        UserProfile profile = UserProfile(
+          name: _nameController.text,
+          dob: _dobController.text,
+          pcp: _pcpController.text,
+          healthConditions: _healthConditionsController.text,
+          pharmacy: _pharmacyController.text,
+        );
 
-      Provider.of<ProfileProvider>(context, listen: false).addProfile(profile);
+        Provider.of<ProfileProvider>(context, listen: false)
+            .addProfile(profile);
 
-      if (!mounted) return;
+        if (!mounted) return;
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      }
+    } catch (e) {
+      // Handle the error, e.g., show a dialog or a snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
       );
     }
   }

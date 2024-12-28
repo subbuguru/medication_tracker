@@ -54,29 +54,36 @@ class _EditMedicationPageState extends State<EditMedicationPage> {
   }
 
   void _saveMedication(BuildContext context) {
-    if (_formKey.currentState!.validate()) {
-      final String name = _nameController.text;
-      final String dosage = _dosageController.text;
-      final String additionalInfo = _additionalInfoController.text;
-      final String imageUrl =
-          Provider.of<MedicationProvider>(context, listen: false)
-              .medications
-              .firstWhere((medication) => medication.id == widget.medication.id)
-              .imageUrl;
+    try {
+      if (_formKey.currentState!.validate()) {
+        final String name = _nameController.text;
+        final String dosage = _dosageController.text;
+        final String additionalInfo = _additionalInfoController.text;
+        final String imageUrl = Provider.of<MedicationProvider>(context,
+                listen: false)
+            .medications
+            .firstWhere((medication) => medication.id == widget.medication.id)
+            .imageUrl;
 
-      Medication updatedMedication = Medication(
-        id: widget.medication.id,
-        name: name,
-        dosage: dosage,
-        additionalInfo: additionalInfo,
-        imageUrl: imageUrl,
-        profileId: widget.medication.profileId,
+        Medication updatedMedication = Medication(
+          id: widget.medication.id,
+          name: name,
+          dosage: dosage,
+          additionalInfo: additionalInfo,
+          imageUrl: imageUrl,
+          profileId: widget.medication.profileId,
+        );
+
+        Provider.of<MedicationProvider>(context, listen: false)
+            .updateMedication(updatedMedication);
+
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      // Handle the error, e.g., show a dialog or a snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
       );
-
-      Provider.of<MedicationProvider>(context, listen: false)
-          .updateMedication(updatedMedication);
-
-      Navigator.pop(context);
     }
   }
 
